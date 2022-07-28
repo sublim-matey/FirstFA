@@ -2,7 +2,6 @@ package com.nonnewtonian.firstfa.ui
 
 
 import android.content.res.Configuration
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -10,20 +9,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nonnewtonian.firstfa.model.Quiz
+import com.nonnewtonian.firstfa.model.QuizViewModel
 import com.nonnewtonian.firstfa.model.TrainingType
 
 const val TAG = "TrainingScreen"
@@ -31,8 +25,11 @@ const val TAG = "TrainingScreen"
 @Composable
 fun TrainingScreen(
     trainingType: TrainingType,
+    quizViewModel: QuizViewModel,
     modifier: Modifier = Modifier
 ) {
+    //Changes quiz training type from default, sidesteps injection needs
+    quizViewModel.startQuiz(trainingType)
 
     Log.d(TAG, "TrainingScreen composed")
     val configuration = LocalConfiguration.current
@@ -41,18 +38,17 @@ fun TrainingScreen(
             .fillMaxHeight()
             .fillMaxWidth()
     ) {
-        val quiz by rememberSaveable {
-            mutableStateOf(Quiz(trainingType))
-        }
+        // Hoist this mutablestate into view model
+
         when (configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> LandscapeMode(
                 trainingType = trainingType,
-                quiz = quiz,
+                quizViewModel = quizViewModel,
                 modifier = modifier
             )
             else -> PortraitMode(
                 trainingType = trainingType,
-                quiz = quiz,
+                quizViewModel = quizViewModel,
                 modifier = modifier
             )
         }
@@ -63,7 +59,7 @@ fun TrainingScreen(
 @Composable
 fun LandscapeMode(
     trainingType: TrainingType,
-    quiz: Quiz,
+    quizViewModel: QuizViewModel,
     modifier: Modifier
 ) {
     //TODO("Make landscape mode")
@@ -78,9 +74,9 @@ fun LandscapeMode(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
         ) {
-            Text(text = "Score is ${quiz.score}")
+            Text(text = "Score is ${quizViewModel.score}")
             QuestionText(
-                text = quiz.currentQuestion.inputs[0].toString(),
+                text = quizViewModel.currentQuestion.inputs[0].toString(),
                 modifier.padding(top = 40.dp)
             )
 
@@ -90,7 +86,7 @@ fun LandscapeMode(
             )
 
             QuestionText(
-                text = quiz.currentQuestion.inputs[1].toString(),
+                text = quizViewModel.currentQuestion.inputs[1].toString(),
                 modifier.padding(bottom = 40.dp)
             )
         }
@@ -101,13 +97,13 @@ fun LandscapeMode(
             modifier = modifier
                 .fillMaxHeight()
         ) {
-            AnswerButton(text = quiz.currentQuestion.answerOrder[0].toString(), quiz = quiz)
-            AnswerButton(text = quiz.currentQuestion.answerOrder[1].toString(), quiz = quiz)
-            AnswerButton(text = quiz.currentQuestion.answerOrder[2].toString(), quiz = quiz)
+            AnswerButton(text = quizViewModel.currentQuestion.answerOrder[0].toString(), quizViewModel = quizViewModel)
+            AnswerButton(text = quizViewModel.currentQuestion.answerOrder[1].toString(), quizViewModel = quizViewModel)
+            AnswerButton(text = quizViewModel.currentQuestion.answerOrder[2].toString(), quizViewModel = quizViewModel)
             AnswerButton(
-                text = quiz.currentQuestion.answerOrder[3].toString(),
+                text = quizViewModel.currentQuestion.answerOrder[3].toString(),
                 modifier = modifier.padding(bottom = 40.dp),
-                quiz = quiz
+                quizViewModel = quizViewModel
             )
 
         }
@@ -117,7 +113,7 @@ fun LandscapeMode(
 @Composable
 fun PortraitMode(
     trainingType: TrainingType,
-    quiz: Quiz,
+    quizViewModel: QuizViewModel,
     modifier: Modifier
 ) {
     Column(
@@ -126,9 +122,9 @@ fun PortraitMode(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Text(text = "Score is ${quiz.score}")
+        Text(text = "Score is ${quizViewModel.score}")
         QuestionText(
-            text = quiz.currentQuestion.inputs[0].toString(),
+            text = quizViewModel.currentQuestion.inputs[0].toString(),
             modifier.padding(top = 40.dp)
         )
 
@@ -138,16 +134,16 @@ fun PortraitMode(
         )
 
         QuestionText(
-            text = quiz.currentQuestion.inputs[1].toString(),
+            text = quizViewModel.currentQuestion.inputs[1].toString(),
             modifier.padding(bottom = 40.dp)
         )
-        AnswerButton(text = quiz.currentQuestion.answerOrder[0].toString(), quiz = quiz)
-        AnswerButton(text = quiz.currentQuestion.answerOrder[1].toString(), quiz = quiz)
-        AnswerButton(text = quiz.currentQuestion.answerOrder[2].toString(), quiz = quiz)
+        AnswerButton(text = quizViewModel.currentQuestion.answerOrder[0].toString(), quizViewModel = quizViewModel)
+        AnswerButton(text = quizViewModel.currentQuestion.answerOrder[1].toString(), quizViewModel = quizViewModel)
+        AnswerButton(text = quizViewModel.currentQuestion.answerOrder[2].toString(), quizViewModel = quizViewModel)
         AnswerButton(
             modifier.padding(bottom = 40.dp),
-            quiz,
-            text = quiz.currentQuestion.answerOrder[3].toString()
+            quizViewModel,
+            text = quizViewModel.currentQuestion.answerOrder[3].toString()
         )
     }
 }
@@ -155,13 +151,14 @@ fun PortraitMode(
 @Composable
 fun AnswerButton(
     modifier: Modifier = Modifier,
-    quiz: Quiz,
+    quizViewModel: QuizViewModel,
     text: String
 ) {
     Button(
         onClick = {
             Log.d(TAG, "Button Pressed")
-            quiz.recievePlayerAnswer(text.toInt())
+            quizViewModel.recievePlayerAnswer(text.toInt())
+            //quiz = quiz
         },
         modifier = modifier
             .height(60.dp)

@@ -27,7 +27,7 @@ class QuestionFactory {
 //        }
 //        TODO("assign random param generation based off difficulty")
         val a = List(3) {
-            if(it % 2 == 0){
+            if(it % 2 == 0 && inputs[0] > 2){
                 inputs[0] - (1 until inputs[0]).random()
             }
              else if(difficulty < 3) {
