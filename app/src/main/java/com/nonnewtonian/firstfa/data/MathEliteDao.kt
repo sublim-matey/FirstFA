@@ -8,11 +8,11 @@ import com.nonnewtonian.firstfa.model.TrainingType
 @Dao
 interface MathEliteDao {
 
-    @Query("SELECT * from high_score_table")
-    suspend fun getHighScores(): List<HighScore>
+//    @Query("SELECT * from high_score_table")
+//    suspend fun getHighScores(): List<HighScore>
 
     @Query("SELECT * FROM high_score_table where time =:time and trainingType =:trainingType and level =:level")
-    suspend fun getQuizHighScore(time: Int, trainingType: TrainingType, level: Int)
+    suspend fun getQuizHighScore(time: Int, trainingType: TrainingType, level: Int): HighScore
 
     @Insert(onConflict = REPLACE)
     suspend fun insert(highScore: HighScore)

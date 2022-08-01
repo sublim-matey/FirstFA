@@ -7,6 +7,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -19,6 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nonnewtonian.firstfa.model.QuizViewModel
 import com.nonnewtonian.firstfa.model.TrainingType
+import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 const val TAG = "TrainingScreen"
 
@@ -62,6 +67,7 @@ fun LandscapeMode(
     quizViewModel: QuizViewModel,
     modifier: Modifier
 ) {
+
     //TODO("Make landscape mode")
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
@@ -69,11 +75,13 @@ fun LandscapeMode(
         modifier = modifier
     ) {
 
+
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
         ) {
+            ProgressBarTimer(quizViewModel = quizViewModel)
             Text(text = "Score is ${quizViewModel.score}")
             QuestionText(
                 text = quizViewModel.currentQuestion.inputs[0].toString(),
@@ -97,9 +105,18 @@ fun LandscapeMode(
             modifier = modifier
                 .fillMaxHeight()
         ) {
-            AnswerButton(text = quizViewModel.currentQuestion.answerOrder[0].toString(), quizViewModel = quizViewModel)
-            AnswerButton(text = quizViewModel.currentQuestion.answerOrder[1].toString(), quizViewModel = quizViewModel)
-            AnswerButton(text = quizViewModel.currentQuestion.answerOrder[2].toString(), quizViewModel = quizViewModel)
+            AnswerButton(
+                text = quizViewModel.currentQuestion.answerOrder[0].toString(),
+                quizViewModel = quizViewModel
+            )
+            AnswerButton(
+                text = quizViewModel.currentQuestion.answerOrder[1].toString(),
+                quizViewModel = quizViewModel
+            )
+            AnswerButton(
+                text = quizViewModel.currentQuestion.answerOrder[2].toString(),
+                quizViewModel = quizViewModel
+            )
             AnswerButton(
                 text = quizViewModel.currentQuestion.answerOrder[3].toString(),
                 modifier = modifier.padding(bottom = 40.dp),
@@ -122,6 +139,7 @@ fun PortraitMode(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        ProgressBarTimer(quizViewModel = quizViewModel)
         Text(text = "Score is ${quizViewModel.score}")
         QuestionText(
             text = quizViewModel.currentQuestion.inputs[0].toString(),
@@ -137,9 +155,18 @@ fun PortraitMode(
             text = quizViewModel.currentQuestion.inputs[1].toString(),
             modifier.padding(bottom = 40.dp)
         )
-        AnswerButton(text = quizViewModel.currentQuestion.answerOrder[0].toString(), quizViewModel = quizViewModel)
-        AnswerButton(text = quizViewModel.currentQuestion.answerOrder[1].toString(), quizViewModel = quizViewModel)
-        AnswerButton(text = quizViewModel.currentQuestion.answerOrder[2].toString(), quizViewModel = quizViewModel)
+        AnswerButton(
+            text = quizViewModel.currentQuestion.answerOrder[0].toString(),
+            quizViewModel = quizViewModel
+        )
+        AnswerButton(
+            text = quizViewModel.currentQuestion.answerOrder[1].toString(),
+            quizViewModel = quizViewModel
+        )
+        AnswerButton(
+            text = quizViewModel.currentQuestion.answerOrder[2].toString(),
+            quizViewModel = quizViewModel
+        )
         AnswerButton(
             modifier.padding(bottom = 40.dp),
             quizViewModel,
@@ -182,5 +209,16 @@ fun QuestionText(
         modifier = modifier
             .padding(all = 5.dp)
             .wrapContentSize()
+    )
+}
+
+@Composable
+fun ProgressBarTimer(quizViewModel: QuizViewModel) {
+
+    val time = quizViewModel.quizTime.collectAsState(quizViewModel.quizTimeComposeInit.value)
+
+    LinearProgressIndicator(
+        modifier = Modifier,
+        progress = time.value
     )
 }
