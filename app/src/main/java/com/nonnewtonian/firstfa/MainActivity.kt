@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.nonnewtonian.firstfa.model.QuizViewModel
 import com.nonnewtonian.firstfa.model.TrainingType
+import com.nonnewtonian.firstfa.navigation.MathEliteNavigation
 import com.nonnewtonian.firstfa.ui.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         val quizViewModel: QuizViewModel  by viewModels()
         setContent{
             AppTheme {
-                TrainingScreen(TrainingType.Multiplication, quizViewModel)
+                MathEliteNavigation()
             }
         }
     }

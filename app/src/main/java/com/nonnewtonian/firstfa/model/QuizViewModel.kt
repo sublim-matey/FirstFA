@@ -8,19 +8,29 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.nonnewtonian.firstfa.buisness.QuestionFactory
+import com.nonnewtonian.firstfa.repository.MathEliteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 
 const val TAG = "QUIZ_MODEL"
 val questionFactory = QuestionFactory()
 
-class QuizViewModel(
-    private var trainingType: TrainingType = TrainingType.Multiplication,
-    private val _score: Int = 0,
-    private val _currentQuestion: Question = questionFactory.generateQuestion(trainingType),
+@HiltViewModel
+class QuizViewModel @Inject constructor(
+    _mathEliteRepository: MathEliteRepository
+) : ViewModel() {
+
+    init {
+        Log.d("nav", "QuizViewModel init")
+    }
+
+    private var _trainingType: TrainingType = _mathEliteRepository.getTrainingType()
+    private val _score: Int = 0
+    private val _currentQuestion: Question = questionFactory.generateQuestion(_trainingType)
     private val _quizLength: Int = 1
-    ): ViewModel() {
 
     var score by mutableStateOf(_score)
     var currentQuestion by mutableStateOf(_currentQuestion)
@@ -55,18 +65,20 @@ class QuizViewModel(
         Log.d(TAG, "Recieved Answer")
         if (answer == currentQuestion.correctAnswer) {
             Log.d(TAG, "recievePlayerAnswer called")
-            currentQuestion = questionFactory.generateQuestion(trainingType)
+            currentQuestion = questionFactory.generateQuestion(_trainingType)
             score++
 
         } else {
             Log.d(TAG, "Question is revamped")
-            currentQuestion = questionFactory.generateQuestion(trainingType)
+            currentQuestion = questionFactory.generateQuestion(_trainingType)
 
         }
     }
 
     fun startQuiz(trainingType: TrainingType) {
-        this.trainingType = trainingType
+        this._trainingType = trainingType
     }
+
+    fun getTrainingType(): TrainingType = _trainingType
 
 }

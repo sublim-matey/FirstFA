@@ -9,19 +9,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nonnewtonian.firstfa.model.TrainingType
 
-@Preview
-@Composable
-fun MultiplicationButtonPreview(){
-    MultiplicationButton()
-}
+//@Preview
+//@Composable
+//fun MultiplicationButtonPreview(){
+//    MultiplicationButton()
+//}
 
 @Composable
 fun MultiplicationButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
         .padding(top = 20.dp)
 ){
     Button(
-        onClick = { /*TrainingScreen(TrainingType.Multiplication)*/ }
+        onClick = onClick
     ) {
         Text(text = "Multiplication")
     }

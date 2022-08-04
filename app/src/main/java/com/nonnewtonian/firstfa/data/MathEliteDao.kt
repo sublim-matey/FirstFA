@@ -4,6 +4,7 @@ import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
 import com.nonnewtonian.firstfa.model.HighScore
 import com.nonnewtonian.firstfa.model.TrainingType
+import dagger.Provides
 
 @Dao
 interface MathEliteDao {

@@ -18,23 +18,30 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nonnewtonian.firstfa.model.QuizViewModel
 import com.nonnewtonian.firstfa.model.TrainingType
+import com.nonnewtonian.firstfa.repository.MathEliteRepository
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 const val TAG = "TrainingScreen"
 
 @Composable
 fun TrainingScreen(
-    trainingType: TrainingType,
+    navController: NavController,
     quizViewModel: QuizViewModel,
     modifier: Modifier = Modifier
 ) {
     //Changes quiz training type from default, sidesteps injection needs
-    quizViewModel.startQuiz(trainingType)
+    // Probably unnecessary,
+//    quizViewModel.startQuiz(trainingType)
+
 
     Log.d(TAG, "TrainingScreen composed")
     val configuration = LocalConfiguration.current
@@ -47,12 +54,12 @@ fun TrainingScreen(
 
         when (configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> LandscapeMode(
-                trainingType = trainingType,
+
                 quizViewModel = quizViewModel,
                 modifier = modifier
             )
             else -> PortraitMode(
-                trainingType = trainingType,
+
                 quizViewModel = quizViewModel,
                 modifier = modifier
             )
@@ -63,7 +70,7 @@ fun TrainingScreen(
 
 @Composable
 fun LandscapeMode(
-    trainingType: TrainingType,
+
     quizViewModel: QuizViewModel,
     modifier: Modifier
 ) {
@@ -89,8 +96,8 @@ fun LandscapeMode(
             )
 
             Image(
-                painter = painterResource(id = trainingType.symbol),
-                contentDescription = trainingType.symbolDescription
+                painter = painterResource(id = quizViewModel.getTrainingType().symbol),
+                contentDescription = quizViewModel.getTrainingType().symbolDescription
             )
 
             QuestionText(
@@ -129,7 +136,7 @@ fun LandscapeMode(
 
 @Composable
 fun PortraitMode(
-    trainingType: TrainingType,
+
     quizViewModel: QuizViewModel,
     modifier: Modifier
 ) {
@@ -147,8 +154,8 @@ fun PortraitMode(
         )
 
         Image(
-            painter = painterResource(id = trainingType.symbol),
-            contentDescription = trainingType.symbolDescription
+            painter = painterResource(id = quizViewModel.getTrainingType().symbol),
+            contentDescription = quizViewModel.getTrainingType().symbolDescription
         )
 
         QuestionText(

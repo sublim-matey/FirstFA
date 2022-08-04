@@ -1,5 +1,6 @@
 package com.nonnewtonian.firstfa.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,17 +12,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.nonnewtonian.firstfa.R
+import com.nonnewtonian.firstfa.navigation.Screens
 
-@Preview
 @Composable
 fun NavScreen(
+    navController: NavController,
     modifier: Modifier = Modifier
         .fillMaxWidth()
 ){
     Surface(
         modifier.background(color = Color.Gray)
     ) {
+        Log.d("navScreen", "nav screen made")
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -36,7 +40,7 @@ fun NavScreen(
                     .padding(bottom = 20.dp)
             )
 
-            MultiplicationButton()
+            MultiplicationButton({ navController.navigate(Screens.TrainingScreen.name) })
             DivisionButton()
             AdditionButton()
             SubtractionButton()
