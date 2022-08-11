@@ -11,6 +11,8 @@ import com.nonnewtonian.firstfa.buisness.QuestionFactory
 import com.nonnewtonian.firstfa.repository.MathEliteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -31,13 +33,16 @@ class QuizViewModel @Inject constructor(
     private val _score: Int = 0
     private val _currentQuestion: Question = questionFactory.generateQuestion(_trainingType)
     private val _quizLength: Int = 1
+    private val _level: Int = 1
+    private val _quizOver = MutableSharedFlow<Boolean>()
+
 
     var score by mutableStateOf(_score)
     var currentQuestion by mutableStateOf(_currentQuestion)
-    private var quizLength = when (_quizLength) {
-        1 -> 60F
-        2 -> 120F
-        3 -> 180F
+    var quizLength = when (_quizLength) {
+        1 -> 10F
+        2 -> 60F
+        3 -> 120F
         4 -> 240F
         else -> 300F
     }
@@ -51,7 +56,11 @@ class QuizViewModel @Inject constructor(
             quizTimeComposeInit.value = secondsPassed / quizLength
             emit(secondsPassed / quizLength)
         }
+        _quizOver.emit(true)
     }
+
+    // Tracks when time is up, sends single event to listener to navigate to ScoreScreen
+    val quizOverFlow = _quizOver.asSharedFlow()
 
     // Tracks init value, so when quizTime is called on recomposition/Rotation
     // It remembers old value
@@ -61,10 +70,10 @@ class QuizViewModel @Inject constructor(
     var quizTimeComposeInit = mutableStateOf(0.0F)
 
 
-    fun recievePlayerAnswer(answer: Int) {
-        Log.d(TAG, "Recieved Answer")
+    fun receivePlayerAnswer(answer: Int) {
+        Log.d(TAG, "Received Answer")
         if (answer == currentQuestion.correctAnswer) {
-            Log.d(TAG, "recievePlayerAnswer called")
+            Log.d(TAG, "receivePlayerAnswer called")
             currentQuestion = questionFactory.generateQuestion(_trainingType)
             score++
 
@@ -77,6 +86,13 @@ class QuizViewModel @Inject constructor(
 
     fun startQuiz(trainingType: TrainingType) {
         this._trainingType = trainingType
+    }
+
+    fun getHighScore(): HighScore {
+        return HighScore(this._trainingType, this.score, this._quizLength, this._level)
+    }
+    fun stop() {
+        quizTime
     }
 
     fun getTrainingType(): TrainingType = _trainingType

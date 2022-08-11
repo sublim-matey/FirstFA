@@ -20,15 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nonnewtonian.firstfa.model.QuizViewModel
-import com.nonnewtonian.firstfa.model.TrainingType
-import com.nonnewtonian.firstfa.repository.MathEliteRepository
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import com.nonnewtonian.firstfa.navigation.Screens
+import kotlinx.coroutines.delay
 
 const val TAG = "TrainingScreen"
 
@@ -50,7 +43,16 @@ fun TrainingScreen(
             .fillMaxHeight()
             .fillMaxWidth()
     ) {
-        // Hoist this mutablestate into view model
+
+        // Collects one event, to navigate to ScoreScreen at time end
+        LaunchedEffect(Unit) {
+            quizViewModel.quizOverFlow.collect { event ->
+                when (event) {
+                    true -> navController.navigate(Screens.ScoreScreen.name)
+                    else -> {}
+                }
+            }
+        }
 
         when (configuration.orientation) {
             Configuration.ORIENTATION_LANDSCAPE -> LandscapeMode(
@@ -75,7 +77,6 @@ fun LandscapeMode(
     modifier: Modifier
 ) {
 
-    //TODO("Make landscape mode")
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
@@ -191,7 +192,7 @@ fun AnswerButton(
     Button(
         onClick = {
             Log.d(TAG, "Button Pressed")
-            quizViewModel.recievePlayerAnswer(text.toInt())
+            quizViewModel.receivePlayerAnswer(text.toInt())
             //quiz = quiz
         },
         modifier = modifier

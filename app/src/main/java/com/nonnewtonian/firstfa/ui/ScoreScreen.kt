@@ -11,14 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 
 import com.nonnewtonian.firstfa.model.HighScore
+import com.nonnewtonian.firstfa.model.MathEliteViewModel
+import com.nonnewtonian.firstfa.model.QuizViewModel
 
 @Composable
 fun ScoreScreen(
+    navController: NavController,
     modifier: Modifier =
         Modifier,
-    highScore: HighScore,
+    highScore: HighScore
 ) {
     Surface(
         modifier = Modifier
@@ -32,7 +36,8 @@ fun ScoreScreen(
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-           Text(text = highScore.score.toString())
+            Text(text = highScore.score.toString())
+            Text(text = highScore.trainingType.value)
 
         }
     }
