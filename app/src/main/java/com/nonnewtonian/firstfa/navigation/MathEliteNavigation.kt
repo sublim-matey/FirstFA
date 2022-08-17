@@ -16,7 +16,7 @@ import com.nonnewtonian.firstfa.ui.ScoreScreen
 @Composable
 fun MathEliteNavigation() {
     val navController = rememberNavController()
-    val quizViewModel = hiltViewModel<QuizViewModel>()
+    var quizViewModel = hiltViewModel<QuizViewModel>()
     NavHost(navController = navController, startDestination = Screens.NavScreen.name){
 
         composable(Screens.NavScreen.name) {
@@ -26,12 +26,12 @@ fun MathEliteNavigation() {
         // Need to figure out how to centralize Repository in other screens
         composable(Screens.TrainingScreen.name ) {
             Log.d("nav", "TrainingScreen navigate called")
-            //val quizViewModel = hiltViewModel<QuizViewModel>()
+            quizViewModel = hiltViewModel<QuizViewModel>()
             Log.d("nav", "quizViewModel created")
             TrainingScreen(navController = navController, quizViewModel = quizViewModel)
         }
 
-        //resets QuizViewModel, takes highScore info N passes it to ScoreScreen
+        //takes highScore info N passes it to ScoreScreen
         composable(Screens.ScoreScreen.name) {
             val highScore = quizViewModel.getHighScore()
             ScoreScreen( navController = navController, highScore =  highScore)
