@@ -10,6 +10,8 @@ import com.nonnewtonian.firstfa.model.QuizViewModel
 import com.nonnewtonian.firstfa.ui.NavScreen
 import com.nonnewtonian.firstfa.ui.TrainingScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.nonnewtonian.firstfa.model.QuizSelectViewModel
+import com.nonnewtonian.firstfa.ui.QuizSelect
 import com.nonnewtonian.firstfa.ui.ScoreScreen
 
 
@@ -17,10 +19,11 @@ import com.nonnewtonian.firstfa.ui.ScoreScreen
 fun MathEliteNavigation() {
     val navController = rememberNavController()
     var quizViewModel = hiltViewModel<QuizViewModel>()
+    val quizSelectViewModel = hiltViewModel<QuizSelectViewModel>()
     NavHost(navController = navController, startDestination = Screens.NavScreen.name){
 
         composable(Screens.NavScreen.name) {
-            NavScreen(navController = navController)
+            NavScreen(quizViewModel, navController = navController)
         }
 
         // Need to figure out how to centralize Repository in other screens
@@ -35,6 +38,11 @@ fun MathEliteNavigation() {
         composable(Screens.ScoreScreen.name) {
             val highScore = quizViewModel.getHighScore()
             ScoreScreen( navController = navController, highScore =  highScore)
+        }
+
+        //QuizSelectScreen
+        composable(Screens.QuizSelectScreen.name){
+            QuizSelect(navController = navController, quizSelectViewModel = quizSelectViewModel)
         }
 
     }

@@ -5,7 +5,8 @@ enum class Screens {
     TrainingScreen,
     ScoreScreen,
     CustomScreen,
-    ButtonSelectScreen,
+    QuizSelectScreen,
     AdScreen,
     PurchaseScreen
+
 }

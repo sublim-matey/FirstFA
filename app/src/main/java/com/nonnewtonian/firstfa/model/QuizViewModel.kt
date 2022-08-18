@@ -22,7 +22,7 @@ val questionFactory = QuestionFactory()
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(
-    _mathEliteRepository: MathEliteRepository
+    private val _mathEliteRepository: MathEliteRepository
 ) : ViewModel() {
 
     init {
@@ -35,6 +35,8 @@ class QuizViewModel @Inject constructor(
     private val _quizLength: Int = 1
     private val _level: Int = 1
     private val _quizOver = MutableSharedFlow<Boolean>()
+
+
 
 
     var score by mutableStateOf(_score)
@@ -96,5 +98,6 @@ class QuizViewModel @Inject constructor(
     }
 
     fun getTrainingType(): TrainingType = _trainingType
+    fun setTrainingType(trainingType: TrainingType) = _mathEliteRepository.putTrainingType(trainingType)
 
 }
