@@ -1,6 +1,7 @@
-package com.nonnewtonian.firstfa.model
+package com.nonnewtonian.firstfa.data
 
 import androidx.room.Entity
+import com.nonnewtonian.firstfa.model.TrainingType
 
 @Entity(tableName = "high_score_table", primaryKeys = ["trainingType", "time", "level"])
 data class HighScore(

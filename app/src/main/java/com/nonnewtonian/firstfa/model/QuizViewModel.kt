@@ -6,8 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.nonnewtonian.firstfa.buisness.QuestionFactory
+import com.nonnewtonian.firstfa.data.HighScore
 import com.nonnewtonian.firstfa.repository.MathEliteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -98,6 +98,5 @@ class QuizViewModel @Inject constructor(
     }
 
     fun getTrainingType(): TrainingType = _trainingType
-    fun setTrainingType(trainingType: TrainingType) = _mathEliteRepository.putTrainingType(trainingType)
 
 }

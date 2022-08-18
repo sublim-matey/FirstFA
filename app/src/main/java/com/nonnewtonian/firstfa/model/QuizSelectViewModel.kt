@@ -11,13 +11,18 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizSelectViewModel @Inject constructor(private val repository: MathEliteRepository) :
     ViewModel() {
-        val levelSelectOptions = listOf(
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"
-        )
-        var selectedLevelOption by mutableStateOf("")
+    val levelSelectOptions = listOf(
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+    )
+    var selectedLevelOption by mutableStateOf("")
+
+    fun submit() {
+        TODO()
+    }
+
 
 }

@@ -12,13 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
-import com.nonnewtonian.firstfa.model.HighScore
-import com.nonnewtonian.firstfa.model.MathEliteViewModel
-import com.nonnewtonian.firstfa.model.QuizViewModel
+import com.nonnewtonian.firstfa.data.HighScore
 import com.nonnewtonian.firstfa.navigation.Screens
 
 @Composable

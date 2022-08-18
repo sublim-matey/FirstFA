@@ -2,12 +2,10 @@ package com.nonnewtonian.firstfa.data
 
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import com.nonnewtonian.firstfa.model.HighScore
 import com.nonnewtonian.firstfa.model.TrainingType
-import dagger.Provides
 
 @Dao
-interface MathEliteDao {
+interface HighScoreDao {
 
 //    @Query("SELECT * from high_score_table")
 //    suspend fun getHighScores(): List<HighScore>
