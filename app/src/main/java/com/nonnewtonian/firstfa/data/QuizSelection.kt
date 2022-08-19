@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nonnewtonian.firstfa.model.TrainingType
 
-@Entity
+@Entity(tableName = "quiz_selection_table")
 data class QuizSelection(
     @PrimaryKey
     val trainingType: TrainingType,

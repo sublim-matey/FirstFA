@@ -16,11 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.nonnewtonian.firstfa.R
+import com.nonnewtonian.firstfa.model.QuizSelectViewModel
 import com.nonnewtonian.firstfa.model.QuizViewModel
+import com.nonnewtonian.firstfa.model.TrainingType
 import com.nonnewtonian.firstfa.navigation.Screens
 
 @Composable
 fun NavScreen(
+    quizSelectViewModel: QuizSelectViewModel,
     quizViewModel: QuizViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
@@ -44,26 +47,27 @@ fun NavScreen(
                     .padding(bottom = 20.dp)
             )
 
-            MultiplicationButton(navController)
-            DivisionButton(navController)
-            AdditionButton(navController)
-            SubtractionButton(navController)
+            MultiplicationButton(quizSelectViewModel, navController)
+            DivisionButton(quizSelectViewModel, navController)
+            AdditionButton(quizSelectViewModel, navController)
+            SubtractionButton(quizSelectViewModel, navController)
         }
     }
 }
 
 @Composable
 fun MultiplicationButton(
+    quizSelectViewModel: QuizSelectViewModel,
     navController: NavController,
-    onClick: () -> Unit = {
-
-        navController.navigate(Screens.QuizSelectScreen.name)
-    },
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
         .padding(top = 20.dp)
 ) {
     Button(
-        onClick = onClick
+        onClick = {
+            quizSelectViewModel.setTrainingType(TrainingType.Multiplication)
+            navController.navigate(Screens.QuizSelectScreen.name)
+        }
     ) {
         Text(text = "Multiplication")
     }
@@ -72,11 +76,15 @@ fun MultiplicationButton(
 
 @Composable
 fun DivisionButton(
+    quizSelectViewModel: QuizSelectViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = { /*TODO*/ }
+        onClick = {
+            quizSelectViewModel.setTrainingType(TrainingType.Division)
+            navController.navigate(Screens.QuizSelectScreen.name)
+        }
     ) {
         Text(text = "Division")
     }
@@ -84,20 +92,28 @@ fun DivisionButton(
 
 @Composable
 fun AdditionButton(
+    quizSelectViewModel: QuizSelectViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    Button(onClick = { /*TODO*/ }) {
+    Button(onClick = {
+        quizSelectViewModel.setTrainingType(TrainingType.Addition)
+        navController.navigate(Screens.QuizSelectScreen.name)
+    }) {
         Text(text = "Addition")
     }
 }
 
 @Composable
 fun SubtractionButton(
+    quizSelectViewModel: QuizSelectViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    Button(onClick = { /*TODO*/ }) {
+    Button(onClick = {
+        quizSelectViewModel.setTrainingType(TrainingType.Subtraction)
+        navController.navigate(Screens.QuizSelectScreen.name)
+    }) {
         Text(text = "Subtraction")
     }
 }

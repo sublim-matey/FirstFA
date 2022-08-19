@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.nonnewtonian.firstfa.data.HighScoreDao
 import com.nonnewtonian.firstfa.data.MathEliteDatabase
+import com.nonnewtonian.firstfa.data.QuizSelectDao
+import com.nonnewtonian.firstfa.data.QuizSelection
 import com.nonnewtonian.firstfa.repository.MathEliteRepository
 import dagger.Module
 import dagger.Provides
@@ -23,6 +25,11 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun providesQuizSelectDao(mathEliteDatabase: MathEliteDatabase): QuizSelectDao =
+        mathEliteDatabase.quizSelectDao()
+
+    @Singleton
+    @Provides
     fun provideAppDatabase(@ApplicationContext context: Context): MathEliteDatabase {
         return Room.databaseBuilder(
             context,
@@ -34,6 +41,6 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMathEliteRepository(highScoreDao: HighScoreDao): MathEliteRepository =
-        MathEliteRepository(highScoreDao)
+    fun provideMathEliteRepository(highScoreDao: HighScoreDao, quizSelectDao: QuizSelectDao): MathEliteRepository =
+        MathEliteRepository(highScoreDao, quizSelectDao)
 }

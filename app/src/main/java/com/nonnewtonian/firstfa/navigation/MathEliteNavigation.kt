@@ -23,7 +23,7 @@ fun MathEliteNavigation() {
     NavHost(navController = navController, startDestination = Screens.NavScreen.name){
 
         composable(Screens.NavScreen.name) {
-            NavScreen(quizViewModel, navController = navController)
+            NavScreen(quizSelectViewModel, quizViewModel, navController = navController)
         }
 
         // Need to figure out how to centralize Repository in other screens
